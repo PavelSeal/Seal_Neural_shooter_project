@@ -7,6 +7,7 @@ public class WeaponManager : MonoBehaviour
     private int currentWeaponIndex = 0;
     private Vector3 originalRotation;
     private bool isSwitching = false;
+    public AmmoUI ammoUI;
 
     void Start()
     {
@@ -57,6 +58,11 @@ public class WeaponManager : MonoBehaviour
         // Обновляем текущий индекс
         currentWeaponIndex = newIndex;
         isSwitching = false;
+
+        if (ammoUI != null)
+        {
+            ammoUI.UpdateCurrentWeapon();
+        }
     }
 
     private IEnumerator RotateWeapon(GameObject weapon, Vector3 fromRotation, Vector3 toRotation)
@@ -69,4 +75,12 @@ public class WeaponManager : MonoBehaviour
             yield return null;
         }
     }
+
+    public GameObject GetCurrentWeapon()
+    {
+        return weapons[currentWeaponIndex];
+    }
+
+
+
 }

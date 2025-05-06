@@ -18,13 +18,13 @@ public class Shooting : MonoBehaviour
     public int maxAmmoInReserve = 100;
 
     // Текущее количество патронов в запасе
-    private int currentAmmoInReserve;
+    public int currentAmmoInReserve;
 
     // Размер магазина с пулями
     public int magazineSize = 30;
 
     // Текущее количество пуль в магазине
-    private int currentAmmo;
+    public int currentAmmo;
 
     // Время перезарядки (в секундах)
     public float reloadTime = 2f;
@@ -65,7 +65,7 @@ public class Shooting : MonoBehaviour
         currentAmmo = magazineSize; // Инициализация текущего количества пуль в магазине
         originalPosition = transform.localPosition; // Сохранение оригинальной позиции объекта
         originalRotation = transform.localRotation; // Сохранение оригинального вращения объекта
-
+    
         // Если камера не задана, назначаем основную камеру игрока
         if (playerCamera == null)
         {
@@ -190,7 +190,7 @@ public class Shooting : MonoBehaviour
 
 
 
-
+    // отдача
     void ApplyRecoil()
     {
         // Случайное смещение позиции для имитации отдачи
@@ -210,4 +210,5 @@ public class Shooting : MonoBehaviour
         transform.localRotation *= Quaternion.Euler(recoilRotation);
 
     }
+
 }

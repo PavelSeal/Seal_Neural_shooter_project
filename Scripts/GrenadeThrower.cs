@@ -4,8 +4,9 @@ public class GrenadeThrower : MonoBehaviour
 {
     public GameObject grenadePrefab; // префаб гранаты
     public int maxGrenades = 3; // Максимальное количество гранат
-    private int currentGrenades;
+    public int currentGrenades;
     private Camera playerCamera; // Ссылка на камеру игрока
+
 
     void Start()
     {

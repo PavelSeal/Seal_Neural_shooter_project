@@ -3,21 +3,27 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public int damage = 10;
-        public float lifetime = 3f; // Время жизни пули в секундах
+    public float lifetime = 3f;
+    public string enemyTag = "Enemy"; // Тег врага (можно изменить в инспекторе)
 
     void Start()
     {
-        // Уничтожаем пулю через заданное время
         Destroy(gameObject, lifetime);
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        Target target = collision.gameObject.GetComponent<Target>();
-        if (target != null)
+        if (collision.gameObject.CompareTag(enemyTag))
         {
-            target.TakeDamage(damage);
+            // Пытаемся вызвать TakeDamage любым способом
+            collision.gameObject.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
         }
         Destroy(gameObject);
     }
+}
+
+// Интерфейс для объектов, которые могут получать урон
+public interface ITakeDamage
+{
+    void TakeDamage(int damage);
 }

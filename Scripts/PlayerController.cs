@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     public float crouchTransitionSpeed = 5f; // Скорость перехода между приседанием и выпрямлением
 
     public int maxHealth = 100; // Максимальное здоровье игрока
-    private int currentHealth; // Текущее здоровье игрока
+    public int currentHealth; // Текущее здоровье игрока
 
     private CharacterController controller;
     private float xRotation = 0f;
@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked; // Скрываем курсор
         originalHeight = controller.height; // Сохраняем изначальную высоту
         targetHeight = originalHeight; // Устанавливаем целевую высоту
-        currentHealth = maxHealth; // Инициализация текущего здоровья
+        // currentHealth = maxHealth; // Инициализация текущего здоровья
     }
 
     void Update()
