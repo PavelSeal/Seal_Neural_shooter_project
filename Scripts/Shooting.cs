@@ -59,6 +59,15 @@ public class Shooting : MonoBehaviour
     // Главная камера игрока
     public Camera playerCamera;
 
+    // Система частиц для выстрела (дульная вспышка)
+    public ParticleSystem bulletCreationParticles;
+    public Light muzzleFlashLight;
+    public float flashDuration = 0.05f;
+
+    // Звук выстрела
+    public AudioSource audioSource;
+    public AudioClip shootSound;
+
     void Start()
     {
         currentAmmoInReserve = maxAmmoInReserve; // Инициализация количества патронов в запасе
@@ -70,6 +79,16 @@ public class Shooting : MonoBehaviour
         if (playerCamera == null)
         {
             playerCamera = Camera.main;
+        }
+
+        // Проверка и инициализация AudioSource
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+            if (audioSource == null)
+            {
+                audioSource = gameObject.AddComponent<AudioSource>();
+            }
         }
     }
 
@@ -122,6 +141,23 @@ public class Shooting : MonoBehaviour
             return;
         }
 
+        // Воспроизведение звука выстрела
+        if (audioSource != null && shootSound != null)
+        {
+            audioSource.PlayOneShot(shootSound);
+        }
+
+        if (bulletCreationParticles != null)
+        {
+            bulletCreationParticles.Play();
+        }
+
+        if (muzzleFlashLight != null)
+        {
+            muzzleFlashLight.enabled = true;
+            Invoke(nameof(DisableMuzzleFlash), flashDuration); // Выключить через flashDuration секунд
+        }
+
         // Создание луча от центра экрана до ближайшей точки попадания
         Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
@@ -141,13 +177,14 @@ public class Shooting : MonoBehaviour
         // Направление выстрела
         Vector3 shootDirection = (targetPoint - firePoint.position).normalized;
 
-        // Создание пули и применение силы
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+        // Создание пули с правильным вращением
+        Quaternion bulletRotation = Quaternion.LookRotation(shootDirection);
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, bulletRotation);
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
 
         if (rb != null)
         {
-            rb.linearVelocity = shootDirection * bulletForce; // Применение скорости пули
+            rb.linearVelocity = shootDirection * bulletForce;
         }
         else
         {
@@ -209,6 +246,11 @@ public class Shooting : MonoBehaviour
         );
         transform.localRotation *= Quaternion.Euler(recoilRotation);
 
+    }
+
+    private void DisableMuzzleFlash() //вспышки света
+    {
+        muzzleFlashLight.enabled = false;
     }
 
 }
